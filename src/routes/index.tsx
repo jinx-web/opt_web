@@ -103,13 +103,13 @@ const blueprintCats: Record<string, { title: string; desc: string }[]> = {
 };
 
 const diamondLayers = [
-  { kicker: "LAYER 07", title: "Your Live Product", desc: "Deliver agent-powered experiences inside your apps, portals and workflows.", tags: ["Web SDK", "Mobile", "Embeds"] },
-  { kicker: "LAYER 06", title: "Connect Anywhere", desc: "Bring agents into Slack, Teams, email, CRM, ticketing and voice channels.", tags: ["Slack", "Teams", "Voice", "CRM"] },
-  { kicker: "LAYER 05", title: "Any LLM", desc: "Route to OpenAI, Anthropic, Bedrock, Gemini or your own private models.", tags: ["OpenAI", "Anthropic", "Bedrock", "Open-source"] },
+  { kicker: "LAYER 01", title: "Your Live Product", desc: "Deliver agent-powered experiences inside your apps, portals and workflows.", tags: ["Web SDK", "Mobile", "Embeds"] },
+  { kicker: "LAYER 02", title: "Connect Anywhere", desc: "Bring agents into Slack, Teams, email, CRM, ticketing and voice channels.", tags: ["Slack", "Teams", "Voice", "CRM"] },
+  { kicker: "LAYER 03", title: "Any LLM", desc: "Route to OpenAI, Anthropic, Bedrock, Gemini or your own private models.", tags: ["OpenAI", "Anthropic", "Bedrock", "Open-source"] },
   { kicker: "LAYER 04", title: "Simulation Engine", desc: "Test every agent against thousands of scenarios before it reaches production.", tags: ["1,000s of scenarios", "Adversarial testing", "Six Sigma scoring"] },
-  { kicker: "LAYER 03", title: "Agent Studio", desc: "Design, build and orchestrate agents with no-code canvas or Python SDK.", tags: ["Canvas", "SDK", "Memory + RAG"] },
-  { kicker: "LAYER 02", title: "Audit & Compliance", desc: "Full trace logs, PII detection, SSO + RBAC and policy enforcement.", tags: ["SOC 2", "HIPAA", "GDPR"] },
-  { kicker: "LAYER 01", title: "Control Plane", desc: "Deploy in your VPC with governance, cost monitoring and observability built in.", tags: ["VPC", "Observability", "Cost controls"] },
+  { kicker: "LAYER 05", title: "Agent Studio", desc: "Design, build and orchestrate agents with no-code canvas or Python SDK.", tags: ["Canvas", "SDK", "Memory + RAG"] },
+  { kicker: "LAYER 06", title: "Audit & Compliance", desc: "Full trace logs, PII detection, SSO + RBAC and policy enforcement.", tags: ["SOC 2", "HIPAA", "GDPR"] },
+  { kicker: "LAYER 07", title: "Control Plane", desc: "Deploy in your VPC with governance, cost monitoring and observability built in.", tags: ["VPC", "Observability", "Cost controls"] },
 ];
 
 function Index() {
