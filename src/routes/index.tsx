@@ -173,35 +173,37 @@ function Index() {
           {/* DIAMOND STACK */}
           <div className="relative h-[560px] flex items-center justify-center">
             <div className="relative w-72 h-[480px]">
-              {[0,1,2,3,4,5,6].map((i) => {
-                const active = i === 3;
+              {diamondLayers.map((layer, i) => {
+                const active = i === activeLayer;
                 return (
-                  <div
+                  <button
                     key={i}
-                    className={`absolute left-1/2 -translate-x-1/2 w-40 h-40 rotate-45 rounded-2xl border transition-all duration-500 ${active ? "bg-ember-gradient border-ember shadow-glow scale-110" : "bg-card/40 border-border"}`}
-                    style={{ top: `${i * 56}px`, zIndex: 10 - Math.abs(3 - i) }}
+                    type="button"
+                    aria-label={layer.title}
+                    onClick={() => setActiveLayer(i)}
+                    className={`absolute left-1/2 -translate-x-1/2 w-40 h-40 rotate-45 rounded-2xl border transition-all duration-500 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-ember ${active ? "bg-ember-gradient border-ember shadow-glow scale-110" : "bg-card/40 border-border hover:border-ember/60 hover:bg-card/70"}`}
+                    style={{ top: `${i * 56}px`, zIndex: 10 - Math.abs(activeLayer - i) }}
                   />
                 );
               })}
-              {/* connecting labels */}
-              <div className="absolute -right-72 top-4 w-64 text-sm text-muted-foreground">
-                <div className="px-3 py-2 rounded-full bg-card border border-border inline-block text-xs">Your Live Product</div>
-              </div>
-              <div className="absolute -right-72 top-24 w-64 text-xs text-muted-foreground">Connect agents from anywhere</div>
-              <div className="absolute -right-72 top-44 w-64 text-xs text-muted-foreground">Run on any LLM</div>
-              <div className="absolute -right-72 top-[210px] w-72 p-5 rounded-xl bg-card border border-border shadow-ember">
-                <p className="text-[10px] tracking-widest text-ember mb-2">LAYER 03</p>
-                <p className="text-serif text-xl mb-2">Simulation Engine</p>
-                <p className="text-xs text-muted-foreground mb-3">Test every agent before it reaches production.</p>
+              {/* info panel for the active layer */}
+              <div
+                key={activeLayer}
+                className="absolute -right-72 top-[180px] w-72 p-5 rounded-xl bg-card border border-border shadow-ember animate-in fade-in slide-in-from-right-2 duration-300"
+              >
+                <p className="text-[10px] tracking-widest text-ember mb-2">{diamondLayers[activeLayer].kicker}</p>
+                <p className="text-serif text-xl mb-2">{diamondLayers[activeLayer].title}</p>
+                <p className="text-xs text-muted-foreground mb-3">{diamondLayers[activeLayer].desc}</p>
                 <div className="flex flex-wrap gap-1.5">
-                  {["1,000s of scenarios", "Adversarial testing", "Six Sigma scoring"].map((t) => (
+                  {diamondLayers[activeLayer].tags.map((t) => (
                     <span key={t} className="text-[10px] px-2 py-1 rounded-full bg-accent text-accent-foreground">{t}</span>
                   ))}
                 </div>
               </div>
-              <div className="absolute -right-72 bottom-24 w-64 text-xs text-muted-foreground">Audit &amp; Compliance</div>
+              <p className="absolute -right-72 -top-4 w-64 text-[10px] uppercase tracking-widest text-muted-foreground">Click any layer to explore</p>
             </div>
           </div>
+
         </div>
       </section>
 
