@@ -103,13 +103,13 @@ const blueprintCats: Record<string, { title: string; desc: string }[]> = {
 };
 
 const diamondLayers = [
-  { kicker: "LAYER 07", title: "Your Live Product", desc: "Deliver agent-powered experiences inside your apps, portals and workflows.", tags: ["Web SDK", "Mobile", "Embeds"] },
-  { kicker: "LAYER 06", title: "Connect Anywhere", desc: "Bring agents into Slack, Teams, email, CRM, ticketing and voice channels.", tags: ["Slack", "Teams", "Voice", "CRM"] },
-  { kicker: "LAYER 05", title: "Any LLM", desc: "Route to OpenAI, Anthropic, Bedrock, Gemini or your own private models.", tags: ["OpenAI", "Anthropic", "Bedrock", "Open-source"] },
+  { kicker: "LAYER 01", title: "Your Live Product", desc: "Deliver agent-powered experiences inside your apps, portals and workflows.", tags: ["Web SDK", "Mobile", "Embeds"] },
+  { kicker: "LAYER 02", title: "Connect Anywhere", desc: "Bring agents into Slack, Teams, email, CRM, ticketing and voice channels.", tags: ["Slack", "Teams", "Voice", "CRM"] },
+  { kicker: "LAYER 03", title: "Any LLM", desc: "Route to OpenAI, Anthropic, Bedrock, Gemini or your own private models.", tags: ["OpenAI", "Anthropic", "Bedrock", "Open-source"] },
   { kicker: "LAYER 04", title: "Simulation Engine", desc: "Test every agent against thousands of scenarios before it reaches production.", tags: ["1,000s of scenarios", "Adversarial testing", "Six Sigma scoring"] },
-  { kicker: "LAYER 03", title: "Agent Studio", desc: "Design, build and orchestrate agents with no-code canvas or Python SDK.", tags: ["Canvas", "SDK", "Memory + RAG"] },
-  { kicker: "LAYER 02", title: "Audit & Compliance", desc: "Full trace logs, PII detection, SSO + RBAC and policy enforcement.", tags: ["SOC 2", "HIPAA", "GDPR"] },
-  { kicker: "LAYER 01", title: "Control Plane", desc: "Deploy in your VPC with governance, cost monitoring and observability built in.", tags: ["VPC", "Observability", "Cost controls"] },
+  { kicker: "LAYER 05", title: "Agent Studio", desc: "Design, build and orchestrate agents with no-code canvas or Python SDK.", tags: ["Canvas", "SDK", "Memory + RAG"] },
+  { kicker: "LAYER 06", title: "Audit & Compliance", desc: "Full trace logs, PII detection, SSO + RBAC and policy enforcement.", tags: ["SOC 2", "HIPAA", "GDPR"] },
+  { kicker: "LAYER 07", title: "Control Plane", desc: "Deploy in your VPC with governance, cost monitoring and observability built in.", tags: ["VPC", "Observability", "Cost controls"] },
 ];
 
 function Index() {
@@ -181,8 +181,18 @@ function Index() {
                     type="button"
                     aria-label={layer.title}
                     onClick={() => setActiveLayer(i)}
-                    className={`absolute left-1/2 -translate-x-1/2 w-40 h-40 rotate-45 rounded-2xl border-2 transition-all duration-500 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-ember ${active ? "border-ember shadow-glow scale-110" : "bg-card/60 border-border/80 hover:border-ember/60 hover:bg-card/80"}`}
-                    style={{ top: `${i * 56}px`, zIndex: active ? 20 : 10 - Math.abs(activeLayer - i), background: active ? "linear-gradient(135deg, oklch(0.42 0.14 45), oklch(0.32 0.10 40))" : undefined }}
+                    className={`absolute left-1/2 w-44 h-44 rounded-2xl transition-all duration-500 cursor-pointer focus:outline-none ${active ? "shadow-[0_0_60px_rgba(255,200,170,0.55)]" : "hover:brightness-125"}`}
+                    style={{
+                      top: `${i * 52}px`,
+                      transform: `translateX(-50%) rotate(45deg) scaleY(0.55) ${active ? "scale(1.08)" : ""}`,
+                      transformOrigin: "center",
+                      background: active
+                        ? "linear-gradient(135deg, #ffffff 0%, #f5e8df 100%)"
+                        : "linear-gradient(135deg, rgba(255,255,255,0.28), rgba(255,255,255,0.10))",
+                      border: active ? "1.5px solid rgba(255,180,140,0.9)" : "1px solid rgba(255,255,255,0.18)",
+                      backdropFilter: "blur(2px)",
+                      zIndex: active ? 20 : 10 - Math.abs(activeLayer - i),
+                    }}
                   />
                 );
               })}
