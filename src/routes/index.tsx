@@ -181,8 +181,8 @@ function Index() {
                     type="button"
                     aria-label={layer.title}
                     onClick={() => setActiveLayer(i)}
-                    className={`absolute left-1/2 -translate-x-1/2 w-40 h-40 rotate-45 rounded-2xl border transition-all duration-500 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-ember ${active ? "bg-ember-gradient border-ember shadow-glow scale-110" : "bg-card/40 border-border hover:border-ember/60 hover:bg-card/70"}`}
-                    style={{ top: `${i * 56}px`, zIndex: 10 - Math.abs(activeLayer - i) }}
+                    className={`absolute left-1/2 -translate-x-1/2 w-40 h-40 rotate-45 rounded-2xl border-2 transition-all duration-500 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-ember ${active ? "border-ember shadow-glow scale-110" : "bg-card/60 border-border/80 hover:border-ember/60 hover:bg-card/80"}`}
+                    style={{ top: `${i * 56}px`, zIndex: active ? 20 : 10 - Math.abs(activeLayer - i), background: active ? "linear-gradient(135deg, oklch(0.42 0.14 45), oklch(0.32 0.10 40))" : undefined }}
                   />
                 );
               })}
