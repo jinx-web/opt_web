@@ -181,8 +181,18 @@ function Index() {
                     type="button"
                     aria-label={layer.title}
                     onClick={() => setActiveLayer(i)}
-                    className={`absolute left-1/2 -translate-x-1/2 w-40 h-40 rotate-45 rounded-2xl border-2 transition-all duration-500 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-ember ${active ? "border-ember shadow-glow scale-110" : "bg-card/60 border-border/80 hover:border-ember/60 hover:bg-card/80"}`}
-                    style={{ top: `${i * 56}px`, zIndex: active ? 20 : 10 - Math.abs(activeLayer - i), background: active ? "linear-gradient(135deg, oklch(0.42 0.14 45), oklch(0.32 0.10 40))" : undefined }}
+                    className={`absolute left-1/2 w-44 h-44 rounded-2xl transition-all duration-500 cursor-pointer focus:outline-none ${active ? "shadow-[0_0_60px_rgba(255,200,170,0.55)]" : "hover:brightness-125"}`}
+                    style={{
+                      top: `${i * 52}px`,
+                      transform: `translateX(-50%) rotate(45deg) scaleY(0.55) ${active ? "scale(1.08)" : ""}`,
+                      transformOrigin: "center",
+                      background: active
+                        ? "linear-gradient(135deg, #ffffff 0%, #f5e8df 100%)"
+                        : "linear-gradient(135deg, rgba(255,255,255,0.28), rgba(255,255,255,0.10))",
+                      border: active ? "1.5px solid rgba(255,180,140,0.9)" : "1px solid rgba(255,255,255,0.18)",
+                      backdropFilter: "blur(2px)",
+                      zIndex: active ? 20 : 10 - Math.abs(activeLayer - i),
+                    }}
                   />
                 );
               })}
