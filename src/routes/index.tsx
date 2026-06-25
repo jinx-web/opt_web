@@ -1,13 +1,25 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ArrowRight, Check, ExternalLink, Shield, Boxes, Activity, Workflow, GitBranch, Eye, Cog } from "lucide-react";
 import { useState } from "react";
+import logoUrl from "../logo.png";
+import {
+  Navbar,
+  NavBody,
+  NavItems,
+  MobileNav,
+  NavbarLogo,
+  NavbarButton,
+  MobileNavHeader,
+  MobileNavToggle,
+  MobileNavMenu,
+} from "@/components/ui/resizable-navbar";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Lyzra — Enterprise AI Agent Platform" },
+      { title: "Optylize — Enterprise AI Agent Platform" },
       { name: "description", content: "Take your AI agents to production, faster. Governed, reliable, and running at scale." },
-      { property: "og:title", content: "Lyzra — Enterprise AI Agent Platform" },
+      { property: "og:title", content: "Optylize — Enterprise AI Agent Platform" },
       { property: "og:description", content: "Take your AI agents to production, faster." },
     ],
   }),
@@ -116,30 +128,87 @@ function Index() {
   const [persona, setPersona] = useState<"business" | "developer">("business");
   const [cat, setCat] = useState<keyof typeof blueprintCats>("HR");
   const [activeLayer, setActiveLayer] = useState(3);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  const navItems = [
+    { name: "Solutions", link: "#" },
+    { name: "Platform", link: "#platform" },
+    { name: "Customers", link: "#" },
+    { name: "Pricing", link: "#" },
+    { name: "Partners", link: "#" },
+    { name: "Resources", link: "#" },
+  ];
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* NAV */}
-      <header className="fixed top-0 inset-x-0 z-50 backdrop-blur-xl bg-background/70 border-b border-border">
-        <nav className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <a href="#" className="flex items-center gap-2 group">
-            <div className="w-7 h-7 rotate-45 bg-ember-gradient rounded-sm shadow-ember" />
-            <span className="text-serif text-xl tracking-tight">Lyzra</span>
-          </a>
-          <ul className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
-            {["Solutions", "Platform", "Customers", "Pricing", "Partners", "Resources"].map((l) => (
-              <li key={l}><a href="#" className="hover:text-foreground transition">{l}</a></li>
-            ))}
-          </ul>
-          <div className="flex items-center gap-3">
-            <a href="#" className="hidden md:inline text-sm text-muted-foreground hover:text-foreground">Agent Studio</a>
-            <a href="#contact" className="px-4 py-2 rounded-full bg-ember-gradient text-primary-foreground text-sm font-medium hover:shadow-ember transition">
-              Talk to Us
+      <Navbar>
+        {/* Desktop Navigation */}
+        <NavBody>
+          <NavbarLogo href="#">
+            <img src={logoUrl} alt="Optylize Logo" className="w-7 h-7 object-contain group-hover:scale-105 transition-transform" />
+            <span className="text-serif text-xl tracking-tight">Optylize</span>
+          </NavbarLogo>
+          
+          <NavItems items={navItems} />
+          
+          <div className="flex items-center gap-3 relative z-20">
+            <a href="#" className="hidden md:inline text-sm text-muted-foreground hover:text-foreground transition-colors mr-2">
+              Agent Studio
             </a>
+            <NavbarButton href="#contact" variant="ember">
+              Talk to Us
+            </NavbarButton>
           </div>
-        </nav>
-      </header>
+        </NavBody>
+
+        {/* Mobile Navigation */}
+        <MobileNav>
+          <MobileNavHeader className="px-4 py-1">
+            <NavbarLogo href="#">
+              <img src={logoUrl} alt="Optylize Logo" className="w-7 h-7 object-contain" />
+              <span className="text-serif text-xl tracking-tight font-medium text-foreground">Optylize</span>
+            </NavbarLogo>
+            <MobileNavToggle
+              isOpen={isMobileMenuOpen}
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            />
+          </MobileNavHeader>
+
+          <MobileNavMenu
+            isOpen={isMobileMenuOpen}
+            onClose={() => setIsMobileMenuOpen(false)}
+          >
+            {navItems.map((item, idx) => (
+              <a
+                key={`mobile-link-${idx}`}
+                href={item.link}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-muted-foreground hover:text-foreground text-sm font-medium transition-colors py-1 w-full"
+              >
+                {item.name}
+              </a>
+            ))}
+            <div className="flex w-full flex-col gap-3 pt-4 border-t border-border/40">
+              <a
+                href="#"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-muted-foreground hover:text-foreground text-sm font-medium transition-colors py-1 text-center"
+              >
+                Agent Studio
+              </a>
+              <NavbarButton
+                href="#contact"
+                onClick={() => setIsMobileMenuOpen(false)}
+                variant="ember"
+                className="w-full py-2.5"
+              >
+                Talk to Us
+              </NavbarButton>
+            </div>
+          </MobileNavMenu>
+        </MobileNav>
+      </Navbar>
 
       {/* HERO */}
       <section className="relative pt-40 pb-32 overflow-hidden">
@@ -158,7 +227,7 @@ function Index() {
               <em className="text-ember">to production, faster.</em>
             </h1>
             <p className="text-lg text-muted-foreground max-w-xl mb-10 leading-relaxed">
-              Most enterprise AI agent projects stall between proof of concept and production. Lyzra is the platform and the team that gets your agents across that line. Governed, reliable, and running at scale.
+              Most enterprise AI agent projects stall between proof of concept and production. Optylize is the platform and the team that gets your agents across that line. Governed, reliable, and running at scale.
             </p>
             <div className="flex flex-wrap gap-4">
               <a href="#contact" className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-ember-gradient text-primary-foreground font-medium hover:shadow-ember transition">
@@ -170,9 +239,15 @@ function Index() {
             </div>
           </div>
 
-          {/* DIAMOND STACK */}
-          <div className="relative h-[560px] flex items-center justify-center">
-            <div className="relative w-72 h-[480px]">
+          {/* DIAMOND STACK & INFO PANEL */}
+          <div className="relative flex flex-col items-center justify-center gap-8 lg:gap-12 xl:flex-row xl:items-start xl:justify-center min-h-[560px] lg:min-h-0 xl:h-[560px]">
+            {/* Diamond Stack */}
+            <div
+              className="relative w-72 h-[480px] flex-shrink-0"
+              style={{ perspective: "1200px", transformStyle: "preserve-3d" }}
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+            >
               {diamondLayers.map((layer, i) => {
                 const active = i === activeLayer;
                 return (
@@ -181,36 +256,50 @@ function Index() {
                     type="button"
                     aria-label={layer.title}
                     onClick={() => setActiveLayer(i)}
-                    className={`absolute left-1/2 w-44 h-44 rounded-2xl transition-all duration-500 cursor-pointer focus:outline-none ${active ? "shadow-[0_0_60px_rgba(255,200,170,0.55)]" : "hover:brightness-125"}`}
+                    className={`absolute left-1/2 w-44 h-44 rounded-[28px] transition-all duration-500 cursor-pointer focus:outline-none ${active ? "shadow-[0_0_60px_rgba(255,110,60,0.85)]" : "hover:brightness-125"}`}
                     style={{
-                      top: `${i * 52}px`,
-                      transform: `translateX(-50%) rotate(45deg) scaleY(0.55) ${active ? "scale(1.08)" : ""}`,
-                      transformOrigin: "center",
+                      top: "260px",
+                      transform: `translateX(-50%) translateY(${
+                        -(6 - i) * (isHovered ? 48 : 38) + 
+                        (i < activeLayer ? (isHovered ? -36 : -28) : i > activeLayer ? (isHovered ? 36 : 28) : 0)
+                      }px) rotateX(60deg) rotateZ(-45deg) ${active ? "translateZ(44px)" : "translateZ(0px)"}`,
+                      transformOrigin: "center center",
                       background: active
-                        ? "linear-gradient(135deg, #ffffff 0%, #f5e8df 100%)"
-                        : "linear-gradient(135deg, rgba(255,255,255,0.28), rgba(255,255,255,0.10))",
-                      border: active ? "1.5px solid rgba(255,180,140,0.9)" : "1px solid rgba(255,255,255,0.18)",
-                      backdropFilter: "blur(2px)",
-                      zIndex: active ? 20 : 10 - Math.abs(activeLayer - i),
+                        ? "#ffffff"
+                        : "linear-gradient(135deg, rgba(255,255,255,0.22), rgba(255,255,255,0.06))",
+                      border: active ? "1.5px solid rgba(255,255,255,0.9)" : "1px solid rgba(255,255,255,0.15)",
+                      backdropFilter: "blur(4px)",
+                      zIndex: active ? 50 : 20 - i,
                     }}
                   />
                 );
               })}
-              {/* info panel for the active layer */}
+              <p className="absolute left-1/2 -translate-x-1/2 -top-6 w-64 text-center text-[10px] uppercase tracking-widest text-muted-foreground xl:hidden">
+                Click any layer to explore
+              </p>
+            </div>
+
+            {/* Info Panel */}
+            <div className="relative w-full max-w-sm xl:w-72 xl:mt-[160px]">
+              <p className="hidden xl:block absolute -top-6 left-0 w-64 text-[10px] uppercase tracking-widest text-muted-foreground">
+                Click any layer to explore
+              </p>
               <div
                 key={activeLayer}
-                className="absolute -right-72 top-[180px] w-72 p-5 rounded-xl bg-card border border-border shadow-ember animate-in fade-in slide-in-from-right-2 duration-300"
+                className="p-5 rounded-xl bg-card border border-border shadow-ember animate-in fade-in slide-in-from-bottom-2 duration-300 xl:slide-in-from-right-2"
               >
-                <p className="text-[10px] tracking-widest text-ember mb-2">{diamondLayers[activeLayer].kicker}</p>
-                <p className="text-serif text-xl mb-2">{diamondLayers[activeLayer].title}</p>
-                <p className="text-xs text-muted-foreground mb-3">{diamondLayers[activeLayer].desc}</p>
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-0.5 h-3 bg-ember rounded-full" />
+                  <p className="text-[10px] tracking-widest text-ember uppercase font-semibold">{diamondLayers[activeLayer].kicker}</p>
+                </div>
+                <p className="text-serif text-2xl mb-2">{diamondLayers[activeLayer].title}</p>
+                <p className="text-xs text-muted-foreground mb-4 leading-relaxed">{diamondLayers[activeLayer].desc}</p>
                 <div className="flex flex-wrap gap-1.5">
                   {diamondLayers[activeLayer].tags.map((t) => (
-                    <span key={t} className="text-[10px] px-2 py-1 rounded-full bg-accent text-accent-foreground">{t}</span>
+                    <span key={t} className="text-[10px] px-2.5 py-1 rounded-full bg-ember/10 text-ember border border-ember/15 font-medium">{t}</span>
                   ))}
                 </div>
               </div>
-              <p className="absolute -right-72 -top-4 w-64 text-[10px] uppercase tracking-widest text-muted-foreground">Click any layer to explore</p>
             </div>
           </div>
 
@@ -325,9 +414,9 @@ function Index() {
       {/* REASONS */}
       <section className="py-32">
         <div className="max-w-7xl mx-auto px-6">
-          <p className="text-ember text-xs tracking-[0.2em] uppercase mb-4">Why Enterprises Choose Lyzra</p>
+          <p className="text-ember text-xs tracking-[0.2em] uppercase mb-4">Why Enterprises Choose Optylize</p>
           <h2 className="text-5xl md:text-6xl mb-20 max-w-3xl">
-            Five reasons enterprises <em className="text-ember">pick Lyzra.</em>
+            Five reasons enterprises <em className="text-ember">pick Optylize.</em>
           </h2>
 
           <div className="space-y-6">
@@ -411,8 +500,8 @@ function Index() {
         <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-5 gap-10">
           <div className="md:col-span-2">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-7 h-7 rotate-45 bg-ember-gradient rounded-sm" />
-              <span className="text-serif text-xl">Lyzra</span>
+              <img src={logoUrl} alt="Optylize Logo" className="w-7 h-7 object-contain" />
+              <span className="text-serif text-xl">Optylize</span>
             </div>
             <p className="text-sm text-muted-foreground max-w-sm">Enterprise AI agent platform for teams that ship.</p>
           </div>
@@ -430,7 +519,7 @@ function Index() {
           ))}
         </div>
         <div className="max-w-7xl mx-auto px-6 mt-12 pt-8 border-t border-border flex flex-wrap justify-between text-xs text-muted-foreground gap-4">
-          <span>© 2026 Lyzra. All rights reserved.</span>
+          <span>© 2026 Optylize. All rights reserved.</span>
           <span>SOC 2 · HIPAA · GDPR · ISO 27001</span>
         </div>
       </footer>
