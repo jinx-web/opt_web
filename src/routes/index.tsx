@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ArrowRight, Check, ExternalLink, Shield, Boxes, Activity, Workflow, GitBranch, Eye, Cog } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import logoUrl from "../logo.png";
 import {
   Navbar,
@@ -127,9 +127,17 @@ const diamondLayers = [
 function Index() {
   const [persona, setPersona] = useState<"business" | "developer">("business");
   const [cat, setCat] = useState<keyof typeof blueprintCats>("HR");
-  const [activeLayer, setActiveLayer] = useState(3);
+  const [activeLayer, setActiveLayer] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (isHovered) return;
+    const interval = setInterval(() => {
+      setActiveLayer((prev) => (prev + 1) % diamondLayers.length);
+    }, 2500);
+    return () => clearInterval(interval);
+  }, [isHovered]);
 
   const navItems = [
     { name: "Solutions", link: "#" },
