@@ -149,9 +149,9 @@ function Index() {
             <img src={logoUrl} alt="Optylize Logo" className="w-7 h-7 object-contain group-hover:scale-105 transition-transform" />
             <span className="text-serif text-xl tracking-tight">Optylize</span>
           </NavbarLogo>
-          
+
           <NavItems items={navItems} />
-          
+
           <div className="flex items-center gap-3 relative z-20">
             <a href="#" className="hidden md:inline text-sm text-muted-foreground hover:text-foreground transition-colors mr-2">
               Agent Studio
@@ -259,10 +259,9 @@ function Index() {
                     className={`absolute left-1/2 w-44 h-44 rounded-[28px] transition-all duration-500 cursor-pointer focus:outline-none ${active ? "shadow-[0_0_60px_rgba(255,110,60,0.85)]" : "hover:brightness-125"}`}
                     style={{
                       top: "260px",
-                      transform: `translateX(-50%) translateY(${
-                        -(6 - i) * (isHovered ? 48 : 38) + 
+                      transform: `translateX(-50%) translateY(${-(6 - i) * (isHovered ? 48 : 38) +
                         (i < activeLayer ? (isHovered ? -36 : -28) : i > activeLayer ? (isHovered ? 36 : 28) : 0)
-                      }px) rotateX(60deg) rotateZ(-45deg) ${active ? "translateZ(44px)" : "translateZ(0px)"}`,
+                        }px) rotateX(60deg) rotateZ(-45deg) ${active ? "translateZ(44px)" : "translateZ(0px)"}`,
                       transformOrigin: "center center",
                       background: active
                         ? "#ffffff"
@@ -280,7 +279,12 @@ function Index() {
             </div>
 
             {/* Info Panel */}
-            <div className="relative w-full max-w-sm xl:w-72 xl:mt-[160px]">
+            <div
+              className="relative w-full max-w-sm xl:w-72 xl:mt-0 xl:[transform:translateY(var(--info-y))] transition-all duration-500 ease-out"
+              style={{
+                "--info-y": `${-28 + activeLayer * (isHovered ? 48 : 38)}px`,
+              } as React.CSSProperties}
+            >
               <p className="hidden xl:block absolute -top-6 left-0 w-64 text-[10px] uppercase tracking-widest text-muted-foreground">
                 Click any layer to explore
               </p>
@@ -422,7 +426,7 @@ function Index() {
           <div className="space-y-6">
             {reasons.map((r, i) => (
               <div key={r.title} className="grid lg:grid-cols-12 gap-8 p-8 md:p-12 rounded-3xl bg-card border border-border hover:border-ember/40 transition">
-                <div className="lg:col-span-1 text-serif text-5xl text-ember/60">0{i+1}</div>
+                <div className="lg:col-span-1 text-serif text-5xl text-ember/60">0{i + 1}</div>
                 <div className="lg:col-span-7">
                   <p className="text-xs uppercase tracking-widest text-ember mb-3">{r.kicker}</p>
                   <h3 className="text-3xl md:text-4xl mb-5">{r.title}</h3>
