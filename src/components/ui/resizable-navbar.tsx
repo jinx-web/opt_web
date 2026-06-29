@@ -103,7 +103,7 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
       animate={{
         backdropFilter: visible ? "blur(12px)" : "none",
         boxShadow: visible
-          ? "0 0 24px rgba(34, 42, 53, 0.06), 0 1px 1px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(34, 42, 53, 0.04), 0 0 4px rgba(34, 42, 53, 0.08), 0 16px 68px rgba(47, 48, 55, 0.05), 0 1px 0 rgba(255, 255, 255, 0.1) inset"
+          ? "0 0 30px rgba(124, 92, 255, 0.25), 0 1px 1px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(124, 92, 255, 0.3), 0 0 4px rgba(124, 92, 255, 0.2), 0 16px 68px rgba(0, 0, 0, 0.5)"
           : "none",
         width: visible ? "80%" : "100%",
         y: visible ? 16 : 0,
@@ -118,7 +118,7 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
       }}
       className={cn(
         "relative z-[60] mx-auto hidden w-full max-w-7xl flex-row items-center justify-between self-start rounded-full bg-transparent px-6 py-3 lg:flex",
-        visible && "bg-card/85 border border-border/50 shadow-lg shadow-black/30",
+        visible && "bg-black/60 border border-violet-500/40 backdrop-blur-md",
         className,
       )}
     >
@@ -138,23 +138,137 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
         className,
       )}
     >
-      {items.map((item, idx) => (
-        <a
-          onMouseEnter={() => setHovered(idx)}
-          onClick={onItemClick}
-          className="relative px-4 py-2 text-muted-foreground hover:text-foreground transition-colors"
-          key={`link-${idx}`}
-          href={item.link}
-        >
-          {hovered === idx && (
-            <motion.div
-              layoutId="hovered"
-              className="absolute inset-0 h-full w-full rounded-full bg-white/10"
-            />
-          )}
-          <span className="relative z-20">{item.name}</span>
-        </a>
-      ))}
+      {items.map((item, idx) => {
+        const isCapabilities = item.name === "Capabilities";
+        return (
+          <div
+            key={`link-wrapper-${idx}`}
+            onMouseEnter={() => setHovered(idx)}
+            className="relative py-2"
+          >
+            <a
+              onClick={onItemClick}
+              className="relative px-4 py-2 text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 z-20"
+              href={item.link}
+            >
+              {hovered === idx && (
+                <motion.div
+                  layoutId="hovered"
+                  className="absolute inset-0 h-full w-full rounded-full bg-violet-500/20"
+                />
+              )}
+              <span className="relative z-20 flex items-center gap-1">
+                {item.name}
+                {isCapabilities && (
+                  <svg
+                    className={cn(
+                      "w-3 h-3 text-slate-400 group-hover:text-white transition-transform duration-200",
+                      hovered === idx && "rotate-180"
+                    )}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                )}
+              </span>
+            </a>
+
+            {/* Mega Menu Dropdown under "Capabilities" */}
+            {isCapabilities && hovered === idx && (
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 15 }}
+                transition={{ duration: 0.2 }}
+                className="absolute top-[calc(100%+6px)] left-1/2 -translate-x-1/2 w-[900px] max-h-[520px] overflow-y-auto p-8 rounded-2xl border border-violet-500/30 bg-[#0E0C23]/95 backdrop-blur-xl shadow-2xl shadow-black/80 z-[100] text-left custom-scrollbar"
+              >
+                <div className="grid grid-cols-3 gap-8">
+                  {/* Column 1: Technology */}
+                  <div>
+                    <p className="text-xs uppercase tracking-widest text-[#3B82F6] font-bold mb-4">— Technology</p>
+                    <div className="space-y-4">
+                      {[
+                        { title: "Business Intelligence & Insights", desc: "Leverage deep analytics and automated reporting." },
+                        { title: "Generative AI Fine Tuning", desc: "Optimize pre-trained LLMs with domain data." },
+                        { title: "Agentic AI & Implementation", desc: "Deploy autonomous multi-agent networks." },
+                        { title: "AI Adoption Roadmaps (ML)", desc: "Timelines and integration for classic ML." },
+                        { title: "AI Adoption Roadmaps (Agentic)", desc: "Plan structural migrations to agents." },
+                        { title: "Predictive Analytics & Forecasting", desc: "Identify market changes and customer trends." },
+                        { title: "Technology & AI Consulting", desc: "Consult on infrastructure and security." },
+                      ].map((item) => (
+                        <a
+                          key={item.title}
+                          href="/capabilities"
+                          className="group/item block cursor-pointer"
+                        >
+                          <p className="text-xs font-semibold text-white group-hover/item:text-[#3B82F6] transition-colors">{item.title}</p>
+                          <p className="text-[10px] text-slate-400 mt-0.5 leading-relaxed">{item.desc}</p>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Column 2: Strategy */}
+                  <div>
+                    <p className="text-xs uppercase tracking-widest text-[#10B981] font-bold mb-4">— Strategy</p>
+                    <div className="space-y-4">
+                      {[
+                        { title: "Cost Optimization Strategy", desc: "Minimize cloud and computation expenses." },
+                        { title: "Business & Product Strategy", desc: "Align agent features with business goals." },
+                        { title: "Insights Framework & Automation", desc: "Automate metrics delivery across teams." },
+                        { title: "Pricing & Strategy Consulting", desc: "Develop monetization and pricing models." },
+                        { title: "Operational Perfomance Consulting", desc: "Audit and solve workflow bottlenecks." },
+                        { title: "Go-To-Market & Predictive Revenue", desc: "Predict pipeline changes and audience value." },
+                        { title: "Strategy & Research Consulting", desc: "Market research to validate positioning." },
+                      ].map((item) => (
+                        <a
+                          key={item.title}
+                          href="/capabilities"
+                          className="group/item block cursor-pointer"
+                        >
+                          <p className="text-xs font-semibold text-white group-hover/item:text-[#10B981] transition-colors">{item.title}</p>
+                          <p className="text-[10px] text-slate-400 mt-0.5 leading-relaxed">{item.desc}</p>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Column 3: Advisory */}
+                  <div>
+                    <p className="text-xs uppercase tracking-widest text-[#06B6D4] font-bold mb-4">— Advisory</p>
+                    <div className="space-y-4">
+                      {[
+                        { title: "To Be Announced", desc: "Upcoming advisory framework releases." },
+                        { title: "Agentic Automation & ML Integration", desc: "Connect agent pipelines with ML workflows." },
+                        { title: "Predictive Analytics & Forecasting", desc: "Risk mitigation and portfolio modeling." },
+                        { title: "Market & Industry Research", desc: "Collect competitor intel and industry trends." },
+                        { title: "Financial Analytics & Forecasting", desc: "Simulate balance sheets and predict revenue." },
+                        { title: "Financial Advisory Capability", desc: "Consult on investment and compliance." },
+                      ].map((item) => (
+                        <a
+                          key={item.title}
+                          href="/capabilities"
+                          className="group/item block cursor-pointer"
+                        >
+                          <p className="text-xs font-semibold text-white group-hover/item:text-[#06B6D4] transition-colors">{item.title}</p>
+                          <p className="text-[10px] text-slate-400 mt-0.5 leading-relaxed">{item.desc}</p>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </div>
+        );
+      })}
     </motion.div>
   );
 };
@@ -165,7 +279,7 @@ export const MobileNav = ({ children, className, visible }: MobileNavProps) => {
       animate={{
         backdropFilter: visible ? "blur(12px)" : "none",
         boxShadow: visible
-          ? "0 0 24px rgba(34, 42, 53, 0.06), 0 1px 1px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(34, 42, 53, 0.04), 0 0 4px rgba(34, 42, 53, 0.08), 0 16px 68px rgba(47, 48, 55, 0.05), 0 1px 0 rgba(255, 255, 255, 0.1) inset"
+          ? "0 0 30px rgba(124, 92, 255, 0.25), 0 1px 1px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(124, 92, 255, 0.3), 0 0 4px rgba(124, 92, 255, 0.2), 0 16px 68px rgba(0, 0, 0, 0.5)"
           : "none",
         width: visible ? "90%" : "100%",
         paddingRight: visible ? "16px" : "0px",
@@ -180,7 +294,7 @@ export const MobileNav = ({ children, className, visible }: MobileNavProps) => {
       }}
       className={cn(
         "relative z-50 mx-auto flex w-full max-w-[calc(100vw-2rem)] flex-col items-center justify-between bg-transparent px-0 py-3 lg:hidden",
-        visible && "bg-card/85 border border-border/50 shadow-lg shadow-black/30",
+        visible && "bg-black/60 border border-violet-500/40 backdrop-blur-md",
         className,
       )}
     >
