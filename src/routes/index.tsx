@@ -158,7 +158,7 @@ function Index() {
     { name: "Industry", link: "#" },
     { name: "Capabilities", link: "/capabilities" },
     { name: "Products", link: "#" },
-    { name: "Blogs", link: "#" },
+    { name: "Blogs", link: "/blogs" },
     { name: "Contact us", link: "/contact" },
   ];
 

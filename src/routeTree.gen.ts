@@ -11,7 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CapabilitiesRouteImport } from './routes/capabilities'
+import { Route as BlogsRouteImport } from './routes/blogs'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BlogsIndexRouteImport } from './routes/blogs.index'
+import { Route as BlogsSlugRouteImport } from './routes/blogs.$slug'
 
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
@@ -23,38 +26,75 @@ const CapabilitiesRoute = CapabilitiesRouteImport.update({
   path: '/capabilities',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogsRoute = BlogsRouteImport.update({
+  id: '/blogs',
+  path: '/blogs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogsIndexRoute = BlogsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => BlogsRoute,
+} as any)
+const BlogsSlugRoute = BlogsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BlogsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/blogs': typeof BlogsRouteWithChildren
   '/capabilities': typeof CapabilitiesRoute
   '/contact': typeof ContactRoute
+  '/blogs/$slug': typeof BlogsSlugRoute
+  '/blogs/': typeof BlogsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/capabilities': typeof CapabilitiesRoute
   '/contact': typeof ContactRoute
+  '/blogs/$slug': typeof BlogsSlugRoute
+  '/blogs': typeof BlogsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/blogs': typeof BlogsRouteWithChildren
   '/capabilities': typeof CapabilitiesRoute
   '/contact': typeof ContactRoute
+  '/blogs/$slug': typeof BlogsSlugRoute
+  '/blogs/': typeof BlogsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/capabilities' | '/contact'
+  fullPaths:
+    | '/'
+    | '/blogs'
+    | '/capabilities'
+    | '/contact'
+    | '/blogs/$slug'
+    | '/blogs/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/capabilities' | '/contact'
-  id: '__root__' | '/' | '/capabilities' | '/contact'
+  to: '/' | '/capabilities' | '/contact' | '/blogs/$slug' | '/blogs'
+  id:
+    | '__root__'
+    | '/'
+    | '/blogs'
+    | '/capabilities'
+    | '/contact'
+    | '/blogs/$slug'
+    | '/blogs/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BlogsRoute: typeof BlogsRouteWithChildren
   CapabilitiesRoute: typeof CapabilitiesRoute
   ContactRoute: typeof ContactRoute
 }
@@ -75,6 +115,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CapabilitiesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blogs': {
+      id: '/blogs'
+      path: '/blogs'
+      fullPath: '/blogs'
+      preLoaderRoute: typeof BlogsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -82,11 +129,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blogs/': {
+      id: '/blogs/'
+      path: '/'
+      fullPath: '/blogs/'
+      preLoaderRoute: typeof BlogsIndexRouteImport
+      parentRoute: typeof BlogsRoute
+    }
+    '/blogs/$slug': {
+      id: '/blogs/$slug'
+      path: '/$slug'
+      fullPath: '/blogs/$slug'
+      preLoaderRoute: typeof BlogsSlugRouteImport
+      parentRoute: typeof BlogsRoute
+    }
   }
 }
 
+interface BlogsRouteChildren {
+  BlogsSlugRoute: typeof BlogsSlugRoute
+  BlogsIndexRoute: typeof BlogsIndexRoute
+}
+
+const BlogsRouteChildren: BlogsRouteChildren = {
+  BlogsSlugRoute: BlogsSlugRoute,
+  BlogsIndexRoute: BlogsIndexRoute,
+}
+
+const BlogsRouteWithChildren = BlogsRoute._addFileChildren(BlogsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BlogsRoute: BlogsRouteWithChildren,
   CapabilitiesRoute: CapabilitiesRoute,
   ContactRoute: ContactRoute,
 }

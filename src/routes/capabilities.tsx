@@ -205,7 +205,7 @@ function CapabilitiesPage() {
     { name: "Industry", link: "/#industry" },
     { name: "Capabilities", link: "/capabilities" },
     { name: "Products", link: "/#products" },
-    { name: "Blogs", link: "/#blogs" },
+    { name: "Blogs", link: "/blogs" },
     { name: "Contact us", link: "/contact" },
   ];
 
