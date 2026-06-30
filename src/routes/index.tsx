@@ -14,6 +14,7 @@ import {
   MobileNavToggle,
   MobileNavMenu,
 } from "@/components/ui/resizable-navbar";
+import { Footer } from "@/components/ui/footer";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -158,7 +159,7 @@ function Index() {
     { name: "Capabilities", link: "/capabilities" },
     { name: "Products", link: "#" },
     { name: "Blogs", link: "#" },
-    { name: "Contact us", link: "#contact" },
+    { name: "Contact us", link: "/contact" },
   ];
 
   return (
@@ -207,7 +208,7 @@ function Index() {
                         <p className="text-[10px] uppercase text-[#3B82F6] font-bold tracking-widest mb-1">Technology</p>
                         <div className="flex flex-col gap-1">
                           {["BI & Insights", "GenAI Tuning", "Agentic AI", "Roadmaps (ML)", "Roadmaps (Agentic)", "Predictive Analytics", "AI Consulting"].map((f) => (
-                            <a key={f} href="/capabilities" onClick={() => setIsMobileMenuOpen(false)} className="text-xs text-muted-foreground hover:text-white transition-colors">{f}</a>
+                            <a key={f} href="/capabilities?category=technology" onClick={() => setIsMobileMenuOpen(false)} className="text-xs text-muted-foreground hover:text-white transition-colors">{f}</a>
                           ))}
                         </div>
                       </div>
@@ -215,15 +216,15 @@ function Index() {
                         <p className="text-[10px] uppercase text-[#10B981] font-bold tracking-widest mb-1">Strategy</p>
                         <div className="flex flex-col gap-1">
                           {["Cost Opt Strategy", "Biz & Product Strategy", "Insights Framework", "Pricing Consulting", "Operational Performance", "GTM Revenue", "Research Consulting"].map((ind) => (
-                            <a key={ind} href="/capabilities" onClick={() => setIsMobileMenuOpen(false)} className="text-xs text-muted-foreground hover:text-white transition-colors">{ind}</a>
+                            <a key={ind} href="/capabilities?category=strategy" onClick={() => setIsMobileMenuOpen(false)} className="text-xs text-muted-foreground hover:text-white transition-colors">{ind}</a>
                           ))}
                         </div>
                       </div>
                       <div>
                         <p className="text-[10px] uppercase text-[#06B6D4] font-bold tracking-widest mb-1">Advisory</p>
                         <div className="flex flex-col gap-1">
-                          {["To Be Announced", "Automation Integration", "Risk Analytics", "Market Research", "Financial Analytics", "Advisory Capability"].map((oth) => (
-                            <a key={oth} href="/capabilities" onClick={() => setIsMobileMenuOpen(false)} className="text-xs text-muted-foreground hover:text-white transition-colors">{oth}</a>
+                          {["Automation Integration", "Risk Analytics", "Market Research", "Financial Analytics", "Advisory Capability"].map((oth) => (
+                            <a key={oth} href="/capabilities?category=advisory" onClick={() => setIsMobileMenuOpen(false)} className="text-xs text-muted-foreground hover:text-white transition-colors">{oth}</a>
                           ))}
                         </div>
                       </div>
@@ -701,33 +702,7 @@ function Index() {
       </section>
 
       {/* FOOTER */}
-      <footer className="border-t border-border py-16">
-        <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-5 gap-10">
-          <div className="md:col-span-2">
-            <div className="flex items-center gap-2 mb-4">
-              <img src={logoUrl} alt="Optylize Logo" className="w-7 h-7 object-contain rounded-full" />
-              <span className="font-sans font-bold text-lg tracking-tight text-white">Optylize</span>
-            </div>
-            <p className="text-sm text-muted-foreground max-w-sm">Enterprise AI agent platform for teams that ship.</p>
-          </div>
-          {[
-            { h: "Platform", l: ["Agent Studio", "Architect", "Blueprints", "Simulation"] },
-            { h: "Company", l: ["About", "Customers", "Careers", "Partners"] },
-            { h: "Resources", l: ["Docs", "Blog", "Pricing", "Contact"] },
-          ].map((c) => (
-            <div key={c.h}>
-              <p className="text-sm mb-4">{c.h}</p>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                {c.l.map((i) => <li key={i}><a href="#" className="hover:text-foreground">{i}</a></li>)}
-              </ul>
-            </div>
-          ))}
-        </div>
-        <div className="max-w-7xl mx-auto px-6 mt-12 pt-8 border-t border-border flex flex-wrap justify-between text-xs text-muted-foreground gap-4">
-          <span>© 2026 Optylize. All rights reserved.</span>
-          <span>SOC 2 · HIPAA · GDPR · ISO 27001</span>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

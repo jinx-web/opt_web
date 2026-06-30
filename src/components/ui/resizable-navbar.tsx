@@ -205,7 +205,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
                       ].map((item) => (
                         <a
                           key={item.title}
-                          href="/capabilities"
+                          href="/capabilities?category=technology"
                           className="group/item block cursor-pointer"
                         >
                           <p className="text-xs font-semibold text-white group-hover/item:text-[#3B82F6] transition-colors">{item.title}</p>
@@ -230,7 +230,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
                       ].map((item) => (
                         <a
                           key={item.title}
-                          href="/capabilities"
+                          href="/capabilities?category=strategy"
                           className="group/item block cursor-pointer"
                         >
                           <p className="text-xs font-semibold text-white group-hover/item:text-[#10B981] transition-colors">{item.title}</p>
@@ -245,7 +245,6 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
                     <p className="text-xs uppercase tracking-widest text-[#06B6D4] font-bold mb-4">— Advisory</p>
                     <div className="space-y-4">
                       {[
-                        { title: "To Be Announced", desc: "Upcoming advisory framework releases." },
                         { title: "Agentic Automation & ML Integration", desc: "Connect agent pipelines with ML workflows." },
                         { title: "Predictive Analytics & Forecasting", desc: "Risk mitigation and portfolio modeling." },
                         { title: "Market & Industry Research", desc: "Collect competitor intel and industry trends." },
@@ -254,7 +253,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
                       ].map((item) => (
                         <a
                           key={item.title}
-                          href="/capabilities"
+                          href="/capabilities?category=advisory"
                           className="group/item block cursor-pointer"
                         >
                           <p className="text-xs font-semibold text-white group-hover/item:text-[#06B6D4] transition-colors">{item.title}</p>

@@ -1,7 +1,28 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { ArrowRight, Check, ExternalLink, Shield, Boxes, Activity, Workflow, GitBranch, Eye, Cog } from "lucide-react";
+import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
+import {
+  ArrowRight,
+  ChevronDown,
+  BarChart3,
+  Cpu,
+  Bot,
+  Route as RouteIcon,
+  LineChart,
+  Coins,
+  Target,
+  Sliders,
+  DollarSign,
+  Gauge,
+  Rocket,
+  Search,
+  Boxes,
+  ShieldAlert,
+  Globe,
+  Calculator,
+  Briefcase,
+} from "lucide-react";
 import { useState, useEffect } from "react";
 import { toast, Toaster } from "sonner";
+import { motion, AnimatePresence } from "framer-motion";
 import logoUrl from "../logo.png";
 import {
   Navbar,
@@ -9,13 +30,22 @@ import {
   NavItems,
   MobileNav,
   NavbarLogo,
-  NavbarButton,
   MobileNavHeader,
   MobileNavToggle,
   MobileNavMenu,
 } from "@/components/ui/resizable-navbar";
+import { Footer } from "@/components/ui/footer";
+
+interface CapabilitiesSearch {
+  category?: "technology" | "strategy" | "advisory";
+}
 
 export const Route = createFileRoute("/capabilities")({
+  validateSearch: (search: Record<string, unknown>): CapabilitiesSearch => {
+    return {
+      category: (search.category as any) || "technology",
+    };
+  },
   head: () => ({
     meta: [
       { title: "Capabilities — Optylize" },
@@ -25,37 +55,143 @@ export const Route = createFileRoute("/capabilities")({
   component: CapabilitiesPage,
 });
 
-const column1 = [
-  { title: "Business Intelligence & Insights", desc: "Leverage deep analytics and automated reporting for decision making." },
-  { title: "Generative AI Fine Tuning", desc: "Optimize pre-trained LLMs with your enterprise domain data." },
-  { title: "Agentic AI & Implementation", desc: "Deploy autonomous multi-agent networks inside your workflows." },
-  { title: "AI Adoption Roadmaps (ML)", desc: "Establish custom timelines and integration frameworks for classic ML." },
-  { title: "AI Adoption Roadmaps (Agentic)", desc: "Plan structural migrations to autonomous agent-driven systems." },
-  { title: "Predictive Analytics & Forecasting", desc: "Identify market changes and customer trends using high-fidelity modeling." },
-  { title: "Technology & AI Consulting", desc: "Consult with expert architects on infrastructure, security, and stack selection." }
+const column1Data = [
+  {
+    title: "Business Intelligence & Insights",
+    desc: "Leverage deep analytics and automated reporting for decision making.",
+    category: "ANALYTICS",
+    icon: BarChart3,
+  },
+  {
+    title: "Generative AI Fine Tuning",
+    desc: "Optimize pre-trained LLMs with your enterprise domain data.",
+    category: "MODELING",
+    icon: Cpu,
+  },
+  {
+    title: "Agentic AI & Implementation",
+    desc: "Deploy autonomous multi-agent networks inside your workflows.",
+    category: "INTEGRATION",
+    icon: Bot,
+  },
+  {
+    title: "AI Adoption Roadmaps (ML)",
+    desc: "Establish custom timelines and integration frameworks for classic ML.",
+    category: "ROADMAP",
+    icon: RouteIcon,
+  },
+  {
+    title: "AI Adoption Roadmaps (Agentic)",
+    desc: "Plan structural migrations to autonomous agent-driven systems.",
+    category: "MIGRATION",
+    icon: RouteIcon,
+  },
+  {
+    title: "Predictive Analytics & Forecasting",
+    desc: "Identify market changes and customer trends using high-fidelity modeling.",
+    category: "FORECASTING",
+    icon: LineChart,
+  },
+  {
+    title: "Technology & AI Consulting",
+    desc: "Consult with expert architects on infrastructure, security, and stack selection.",
+    category: "CONSULTING",
+    icon: Cpu,
+  },
 ];
 
-const column2 = [
-  { title: "Cost Optimization Strategy", desc: "Minimize cloud and computation expenses during large-scale deployments." },
-  { title: "Business & Product Strategy", desc: "Align agent features with product roadmaps and strategic goals." },
-  { title: "Insights Framework & Automation", desc: "Automate data aggregation and metric delivery across departments." },
-  { title: "Pricing & Strategy Consulting", desc: "Develop monetization models and pricing matrices for AI products." },
-  { title: "Operational Perfomance Consulting", desc: "Audit workflows to find operational bottlenecks and solve them." },
-  { title: "Go-To-Market & Predictive Revenue", desc: "Predict pipeline changes and target high-value audience segments." },
-  { title: "Strategy & Research Consulting", desc: "In-depth market research to validate product positioning." }
+const column2Data = [
+  {
+    title: "Cost Optimization Strategy",
+    desc: "Minimize cloud and computation expenses during large-scale deployments.",
+    category: "FINANCE",
+    icon: Coins,
+  },
+  {
+    title: "Business & Product Strategy",
+    desc: "Align agent features with product roadmaps and strategic goals.",
+    category: "STRATEGY",
+    icon: Target,
+  },
+  {
+    title: "Insights Framework & Automation",
+    desc: "Automate data aggregation and metric delivery across departments.",
+    category: "AUTOMATION",
+    icon: Sliders,
+  },
+  {
+    title: "Pricing & Strategy Consulting",
+    desc: "Develop monetization models and pricing matrices for AI products.",
+    category: "PRICING",
+    icon: DollarSign,
+  },
+  {
+    title: "Operational Perfomance Consulting",
+    desc: "Audit workflows to find operational bottlenecks and solve them.",
+    category: "OPERATIONS",
+    icon: Gauge,
+  },
+  {
+    title: "Go-To-Market & Predictive Revenue",
+    desc: "Predict pipeline changes and target high-value audience segments.",
+    category: "MARKETING",
+    icon: Rocket,
+  },
+  {
+    title: "Strategy & Research Consulting",
+    desc: "In-depth market research to validate product positioning.",
+    category: "RESEARCH",
+    icon: Search,
+  },
 ];
 
-const column3 = [
-  { title: "Agentic Automation & ML Integration", desc: "Connect agent pipelines with existing classic machine learning workflows." },
-  { title: "Predictive Analytics & Forecasting", desc: "Perform risk mitigation and modeling on financial advisory portfolios." },
-  { title: "Market & Industry Research", desc: "Collect competitor intel and customer trends across target industries." },
-  { title: "Financial Analytics & Forecasting", desc: "Simulate balance sheets and predict revenue using dynamic factors." },
-  { title: "Financial Advisory Capability", desc: "Consult on investment, budgeting, and compliance strategy." }
+const column3Data = [
+  {
+    title: "Agentic Automation & ML Integration",
+    desc: "Connect agent pipelines with existing classic machine learning workflows.",
+    category: "AUTOMATION",
+    icon: Boxes,
+  },
+  {
+    title: "Predictive Analytics & Forecasting",
+    desc: "Perform risk mitigation and modeling on financial advisory portfolios.",
+    category: "RISK ANALYSIS",
+    icon: ShieldAlert,
+  },
+  {
+    title: "Market & Industry Research",
+    desc: "Collect competitor intel and customer trends across target industries.",
+    category: "RESEARCH",
+    icon: Globe,
+  },
+  {
+    title: "Financial Analytics & Forecasting",
+    desc: "Simulate balance sheets and predict revenue using dynamic factors.",
+    category: "FINANCIALS",
+    icon: Calculator,
+  },
+  {
+    title: "Financial Advisory Capability",
+    desc: "Consult on investment, budgeting, and compliance strategy.",
+    category: "ADVISORY",
+    icon: Briefcase,
+  },
+];
+
+const categoriesList = [
+  { id: "technology", name: "Technology", desc: "BI, GenAI tuning, implementation & roadmaps" },
+  { id: "strategy", name: "Strategy", desc: "Cost optimization, product, and operational consulting" },
+  { id: "advisory", name: "Advisory", desc: "ML integration, risk analytics, and financial advisory" },
 ];
 
 function CapabilitiesPage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const search = useSearch({ from: "/capabilities" });
+  const navigate = useNavigate({ from: "/capabilities" });
+  const activeCategory = search.category || "technology";
 
   useEffect(() => {
     const handleResize = () => setIsDesktop(window.innerWidth >= 1280);
@@ -70,7 +206,7 @@ function CapabilitiesPage() {
     { name: "Capabilities", link: "/capabilities" },
     { name: "Products", link: "/#products" },
     { name: "Blogs", link: "/#blogs" },
-    { name: "Contact us", link: "/#contact" },
+    { name: "Contact us", link: "/contact" },
   ];
 
   const handleCardClick = (title: string) => {
@@ -80,8 +216,22 @@ function CapabilitiesPage() {
     });
   };
 
+  const handleCategoryChange = (catId: "technology" | "strategy" | "advisory") => {
+    navigate({
+      search: (prev) => ({ ...prev, category: catId }),
+    });
+    setIsDropdownOpen(false);
+  };
+
+  const activeItems =
+    activeCategory === "strategy"
+      ? column2Data
+      : activeCategory === "advisory"
+      ? column3Data
+      : column1Data;
+
   return (
-    <div className="min-h-screen text-foreground" style={{ background: "#16142E" }}>
+    <div className="min-h-screen text-foreground bg-[#16142E]">
       <Toaster position="bottom-right" theme="dark" />
 
       <Navbar>
@@ -117,7 +267,7 @@ function CapabilitiesPage() {
                 return (
                   <div key={`mobile-link-${idx}`} className="w-full flex flex-col gap-2">
                     <a
-                      href={item.link}
+                      href="/capabilities"
                       onClick={() => setIsMobileMenuOpen(false)}
                       className="text-white text-sm font-semibold tracking-wider uppercase"
                     >
@@ -128,7 +278,7 @@ function CapabilitiesPage() {
                         <p className="text-[10px] uppercase text-[#3B82F6] font-bold tracking-widest mb-1">Technology</p>
                         <div className="flex flex-col gap-1">
                           {["BI & Insights", "GenAI Tuning", "Agentic AI", "Roadmaps (ML)", "Roadmaps (Agentic)", "Predictive Analytics", "AI Consulting"].map((f) => (
-                            <a key={f} href="/capabilities" onClick={() => setIsMobileMenuOpen(false)} className="text-xs text-muted-foreground hover:text-white transition-colors">{f}</a>
+                            <a key={f} href="/capabilities?category=technology" onClick={() => setIsMobileMenuOpen(false)} className="text-xs text-muted-foreground hover:text-white transition-colors">{f}</a>
                           ))}
                         </div>
                       </div>
@@ -136,15 +286,15 @@ function CapabilitiesPage() {
                         <p className="text-[10px] uppercase text-[#10B981] font-bold tracking-widest mb-1">Strategy</p>
                         <div className="flex flex-col gap-1">
                           {["Cost Opt Strategy", "Biz & Product Strategy", "Insights Framework", "Pricing Consulting", "Operational Performance", "GTM Revenue", "Research Consulting"].map((ind) => (
-                            <a key={ind} href="/capabilities" onClick={() => setIsMobileMenuOpen(false)} className="text-xs text-muted-foreground hover:text-white transition-colors">{ind}</a>
+                            <a key={ind} href="/capabilities?category=strategy" onClick={() => setIsMobileMenuOpen(false)} className="text-xs text-muted-foreground hover:text-white transition-colors">{ind}</a>
                           ))}
                         </div>
                       </div>
                       <div>
                         <p className="text-[10px] uppercase text-[#06B6D4] font-bold tracking-widest mb-1">Advisory</p>
                         <div className="flex flex-col gap-1">
-                          {["To Be Announced", "Automation Integration", "Risk Analytics", "Market Research", "Financial Analytics", "Advisory Capability"].map((oth) => (
-                            <a key={oth} href="/capabilities" onClick={() => setIsMobileMenuOpen(false)} className="text-xs text-muted-foreground hover:text-white transition-colors">{oth}</a>
+                          {["Automation Integration", "Risk Analytics", "Market Research", "Financial Analytics", "Advisory Capability"].map((oth) => (
+                            <a key={oth} href="/capabilities?category=advisory" onClick={() => setIsMobileMenuOpen(false)} className="text-xs text-muted-foreground hover:text-white transition-colors">{oth}</a>
                           ))}
                         </div>
                       </div>
@@ -167,143 +317,137 @@ function CapabilitiesPage() {
         </MobileNav>
       </Navbar>
 
-      {/* Main Map Content */}
-      <main className="max-w-7xl mx-auto px-6 pt-40 pb-32">
-        <div className="text-center mb-16">
+      {/* Dark Hero Section */}
+      <main className="w-full">
+        <div className="text-center pt-40 pb-20 px-6 max-w-4xl mx-auto">
           <p className="tracking-[0.2em] text-xs uppercase mb-4" style={{ color: "#9B7FFF" }}>Architect Systems & Flow</p>
           <h1 className="text-5xl md:text-6xl font-serif text-white mb-6 animate-fade-in">Capabilities Architect Map</h1>
           <p className="text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Click any node below to inspect live capabilities, architecture configurations, and deployment strategies.
+            Select a specialized category below to inspect our architecture configurations and deployment strategies.
           </p>
         </div>
 
-        {/* Architect Map Grid */}
-        <div className="grid lg:grid-cols-3 gap-12 lg:gap-8 items-start justify-center max-w-6xl mx-auto pt-8">
+        {/* Transition to Light Beige Section */}
+        <div className="w-full bg-[#F5F2EB] py-20 border-t border-[#EAE6DD]">
+          
+          {/* Responsive Selector Dropdown / Tabs */}
+          <div className="flex justify-center mb-16 px-6">
+            {/* Desktop Tabs */}
+            <div className="hidden md:flex bg-[#EFECE6] p-1.5 rounded-full gap-1.5 border border-[#E0DCD4] shadow-[inset_0_1px_3px_rgba(0,0,0,0.05)]">
+              {categoriesList.map((catItem) => (
+                <button
+                  key={catItem.id}
+                  onClick={() => handleCategoryChange(catItem.id as any)}
+                  className={`rounded-full px-8 py-2.5 text-xs uppercase tracking-widest font-bold transition-all duration-300 ${
+                    activeCategory === catItem.id
+                      ? "bg-[#24211D] text-white shadow-md shadow-[#24211D]/10 cursor-pointer"
+                      : "text-[#6E6458] hover:text-[#24211D] cursor-pointer"
+                  }`}
+                >
+                  {catItem.name}
+                </button>
+              ))}
+            </div>
 
-          {/* Column 1: Blue - Technology */}
-          <div className="relative pl-8 pr-2 py-4 flex flex-col gap-6">
-            {/* Left Connecting Line */}
-            <div className="absolute left-0 top-10 bottom-10 w-[2px] bg-blue-500/60" />
+            {/* Mobile Dropdown */}
+            <div className="md:hidden w-full max-w-xs relative">
+              <button
+                type="button"
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="inline-flex justify-between items-center w-full rounded-2xl border border-[#E0DCD4] shadow-sm px-5 py-4 bg-[#FAF8F5] text-sm font-semibold text-[#24211D] hover:bg-[#F2ECE1] transition-all duration-300 focus:outline-none cursor-pointer"
+              >
+                <span className="capitalize font-bold text-[#24211D]">{activeCategory} Capabilities</span>
+                <ChevronDown className={`w-4 h-4 ml-2 text-[#786D5F] transition-transform duration-300 ${isDropdownOpen ? "rotate-180" : ""}`} />
+              </button>
 
-            {column1.map((item, idx) => {
-              const isLast = idx === column1.length - 1;
-              return (
-                <div key={item.title} className="relative w-full">
-                  {/* Connector Arrow */}
-                  <div className="absolute left-[-32px] w-8 h-[2px] bg-blue-500/60 top-1/2 -translate-y-1/2" />
-                  <div className="absolute left-[-8px] top-1/2 -translate-y-1/2 border-y-[4px] border-y-transparent border-l-[6px] border-l-blue-500/80" />
-
-                  {/* Card Button */}
-                  <button
-                    onClick={() => handleCardClick(item.title)}
-                    className="w-full text-left p-4 rounded-xl border border-violet-500/10 hover:border-blue-500/40 bg-[#0E0C23]/60 hover:bg-[#1E1949]/70 hover:shadow-[0_0_20px_rgba(59,130,246,0.15)] transition duration-300 group cursor-pointer"
-                  >
-                    <span className="text-sm font-semibold text-slate-200 group-hover:text-white transition-colors">{item.title}</span>
-                    <p className="text-xs text-slate-400 mt-1.5 leading-relaxed group-hover:text-slate-300 transition-colors">{item.desc}</p>
-                    {isLast && (
-                      <div className="mt-3.5 inline-block text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest bg-blue-500/10 text-blue-300 border border-blue-500/25">
-                        Technology
+              <AnimatePresence>
+                {isDropdownOpen && (
+                  <>
+                    <div className="fixed inset-0 z-10" onClick={() => setIsDropdownOpen(false)} />
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="origin-top absolute left-0 right-0 mt-2 rounded-2xl shadow-xl bg-[#FAF8F5] border border-[#E0DCD4] z-20 overflow-hidden"
+                    >
+                      <div className="py-1">
+                        {categoriesList.map((catItem) => (
+                          <button
+                            key={catItem.id}
+                            onClick={() => handleCategoryChange(catItem.id as any)}
+                            className={`w-full text-left px-5 py-4 text-sm transition-colors duration-200 flex flex-col gap-1 border-b border-[#EFECE6] last:border-b-0 hover:bg-[#F2ECE1] cursor-pointer ${
+                              activeCategory === catItem.id ? "bg-[#F2ECE1]/50 text-[#24211D] font-bold" : ""
+                            }`}
+                          >
+                            <span className="text-sm font-bold capitalize text-[#24211D]">{catItem.name}</span>
+                            <span className="text-xs text-[#8C8274] leading-normal font-normal">{catItem.desc}</span>
+                          </button>
+                        ))}
                       </div>
-                    )}
-                  </button>
-                </div>
-              );
-            })}
+                    </motion.div>
+                  </>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
 
-          {/* Column 2: Green - Strategy */}
-          <div className="relative pl-8 pr-2 py-4 flex flex-col gap-6">
-            {/* Left Connecting Line */}
-            <div className="absolute left-0 top-10 bottom-10 w-[2px] bg-emerald-500/60" />
-
-            {column2.map((item, idx) => {
-              const isLast = idx === column2.length - 1;
-              return (
-                <div key={item.title} className="relative w-full">
-                  {/* Connector Arrow */}
-                  <div className="absolute left-[-32px] w-8 h-[2px] bg-emerald-500/60 top-1/2 -translate-y-1/2" />
-                  <div className="absolute left-[-8px] top-1/2 -translate-y-1/2 border-y-[4px] border-y-transparent border-l-[6px] border-l-emerald-500/80" />
-
-                  {/* Card Button */}
-                  <button
+          {/* Cards Grid Container with animation */}
+          <div className="max-w-7xl mx-auto px-6">
+            <motion.div
+              key={activeCategory}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto"
+            >
+              {activeItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <div
+                    key={item.title}
                     onClick={() => handleCardClick(item.title)}
-                    className="w-full text-left p-4 rounded-xl border border-violet-500/10 hover:border-emerald-500/40 bg-[#0E0C23]/60 hover:bg-[#152E38]/70 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)] transition duration-300 group cursor-pointer"
+                    className="group relative cursor-pointer bg-[#FAF8F5] border border-[#EADFCF]/50 hover:border-[#D0C0AC] rounded-2xl p-6 shadow-[0_4px_20px_rgba(36,33,29,0.02)] hover:shadow-[0_12px_30px_rgba(36,33,29,0.06)] transition-all duration-300 flex flex-col justify-between"
                   >
-                    <span className="text-sm font-semibold text-slate-200 group-hover:text-white transition-colors">{item.title}</span>
-                    <p className="text-xs text-slate-400 mt-1.5 leading-relaxed group-hover:text-slate-300 transition-colors">{item.desc}</p>
-                    {isLast && (
-                      <div className="mt-3.5 inline-block text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest bg-emerald-500/10 text-emerald-300 border border-emerald-500/25">
-                        Capability MAP
+                    <div>
+                      {/* Tag row */}
+                      <div className="flex items-center gap-3 mb-5">
+                        <div className="bg-[#F2ECE1] text-[#786D5F] p-2 rounded-xl flex items-center justify-center w-9 h-9 group-hover:bg-[#EADFCF] transition-colors duration-300">
+                          <Icon className="w-4.5 h-4.5" />
+                        </div>
+                        <span className="text-[10px] font-bold tracking-widest text-[#786D5F] uppercase">
+                          {item.category}
+                        </span>
                       </div>
-                    )}
-                  </button>
-                </div>
-              );
-            })}
-          </div>
 
-          {/* Column 3: Cyan - Advisory */}
-          <div className="relative pr-8 pl-2 py-4 flex flex-col gap-6">
-            {/* Right Connecting Line */}
-            <div className="absolute right-0 top-10 bottom-10 w-[2px] bg-cyan-500/60" />
+                      {/* Title */}
+                      <h3 className="text-lg md:text-xl font-bold text-[#24211D] mb-2 font-serif group-hover:text-black transition-colors duration-300">
+                        {item.title}
+                      </h3>
 
-            {column3.map((item, idx) => {
-              const isLast = idx === column3.length - 1;
-              return (
-                <div key={item.title} className="relative w-full">
-                  {/* Connector Arrow (Pointing Left from Right Line!) */}
-                  <div className="absolute right-[-32px] w-8 h-[2px] bg-cyan-500/60 top-1/2 -translate-y-1/2" />
-                  <div className="absolute right-[-8px] top-1/2 -translate-y-1/2 border-y-[4px] border-y-transparent border-r-[6px] border-r-cyan-500/80" />
+                      {/* Description */}
+                      <p className="text-sm text-[#6E6458] leading-relaxed mb-6">
+                        {item.desc}
+                      </p>
+                    </div>
 
-                  {/* Card Button */}
-                  <button
-                    onClick={() => handleCardClick(item.title)}
-                    className="w-full text-left p-4 rounded-xl border border-violet-500/10 hover:border-cyan-500/40 bg-[#0E0C23]/60 hover:bg-[#122A3C]/70 hover:shadow-[0_0_20px_rgba(6,182,212,0.15)] transition duration-300 group cursor-pointer"
-                  >
-                    <span className="text-sm font-semibold text-slate-200 group-hover:text-white transition-colors">{item.title}</span>
-                    <p className="text-xs text-slate-400 mt-1.5 leading-relaxed group-hover:text-slate-300 transition-colors">{item.desc}</p>
-                    {isLast && (
-                      <div className="mt-3.5 inline-block text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest bg-cyan-500/10 text-cyan-300 border border-cyan-500/25">
-                        Capability MAP
+                    {/* Separator and View blueprint */}
+                    <div>
+                      <div className="border-t border-[#EFECE6] my-4" />
+                      <div className="text-xs font-bold text-[#5A5043] group-hover:text-black transition-colors duration-300 flex items-center gap-1.5">
+                        <span>View Blueprint</span>
+                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-300" />
                       </div>
-                    )}
-                  </button>
-                </div>
-              );
-            })}
+                    </div>
+                  </div>
+                );
+              })}
+            </motion.div>
           </div>
-
         </div>
       </main>
 
       {/* FOOTER */}
-      <footer className="border-t border-border py-16 bg-[#16142E]">
-        <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-5 gap-10">
-          <div className="md:col-span-2">
-            <div className="flex items-center gap-2 mb-4">
-              <img src={logoUrl} alt="Optylize Logo" className="w-7 h-7 object-contain rounded-full" />
-              <span className="font-sans font-bold text-lg tracking-tight text-white">Optylize</span>
-            </div>
-            <p className="text-sm text-slate-400 max-w-sm">Enterprise AI agent platform for teams that ship.</p>
-          </div>
-          {[
-            { h: "Platform", l: ["Agent Studio", "Architect", "Blueprints", "Simulation"] },
-            { h: "Company", l: ["About", "Customers", "Careers", "Partners"] },
-            { h: "Resources", l: ["Docs", "Blog", "Pricing", "Contact"] },
-          ].map((c) => (
-            <div key={c.h}>
-              <p className="text-sm mb-4 text-white">{c.h}</p>
-              <ul className="space-y-2 text-sm text-slate-400">
-                {c.l.map((i) => <li key={i}><a href="#" className="hover:text-white">{i}</a></li>)}
-              </ul>
-            </div>
-          ))}
-        </div>
-        <div className="max-w-7xl mx-auto px-6 mt-12 pt-8 border-t border-border/10 flex flex-wrap justify-between text-xs text-slate-500 gap-4">
-          <span>© 2026 Optylize. All rights reserved.</span>
-          <span>SOC 2 · HIPAA · GDPR · ISO 27001</span>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
