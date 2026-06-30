@@ -28,23 +28,7 @@ const contactSchema = z.object({
 
 type ContactInput = z.infer<typeof contactSchema>;
 
-// Server Function: Read map SVG file
-const getMapSvg = createServerFn({ method: "GET" })
-  .handler(async () => {
-    try {
-      const fs = await import("fs");
-      const path = await import("path");
-      const filePath = path.resolve(process.cwd(), "world.svg");
-      let svgContent = fs.readFileSync(filePath, "utf8");
-      if (!svgContent.includes("viewBox=")) {
-        svgContent = svgContent.replace("<svg", '<svg viewBox="0 0 1009.6727 665.96301"');
-      }
-      return svgContent;
-    } catch (error) {
-      console.error("Failed to read world.svg:", error);
-      return "";
-    }
-  });
+
 
 // Server Function: Handle contact form SMTP / mock submission
 const submitContactForm = createServerFn({ method: "POST" })
@@ -128,15 +112,30 @@ export const Route = createFileRoute("/contact")({
       { name: "description", content: "Get in touch with the Optylize Enterprise AI team." },
     ],
   }),
-  loader: async () => {
-    const svg = await getMapSvg();
-    return { svg };
-  },
   component: ContactPage,
 });
 
 function ContactPage() {
-  const { svg } = Route.useLoaderData();
+  const [svg, setSvg] = useState<string>("");
+  const [isLoadingMap, setIsLoadingMap] = useState<boolean>(true);
+
+  useEffect(() => {
+    fetch("/world.svg")
+      .then((res) => res.text())
+      .then((svgText) => {
+        let content = svgText;
+        if (!content.includes("viewBox=")) {
+          content = content.replace("<svg", '<svg viewBox="0 0 1009.6727 665.96301"');
+        }
+        setSvg(content);
+        setIsLoadingMap(false);
+      })
+      .catch((err) => {
+        console.error("Failed to load map client side:", err);
+        setIsLoadingMap(false);
+      });
+  }, []);
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Form State
@@ -348,10 +347,16 @@ function ContactPage() {
               `}} />
 
               {/* World SVG Map */}
-              <div
-                className="world-svg-map w-full h-full flex items-center justify-center opacity-65"
-                dangerouslySetInnerHTML={{ __html: svg }}
-              />
+              {isLoadingMap ? (
+                <div className="w-full h-full flex items-center justify-center">
+                  <Loader2 className="w-6 h-6 text-violet-400 animate-spin" />
+                </div>
+              ) : (
+                <div
+                  className="world-svg-map w-full h-full flex items-center justify-center opacity-65"
+                  dangerouslySetInnerHTML={{ __html: svg }}
+                />
+              )}
 
               {/* Glowing Pin Over Delhi, India (X = 68.5%, Y = 57.0%) */}
               <div
